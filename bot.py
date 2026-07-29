@@ -20,7 +20,7 @@ from aiogram.types import (
     InlineKeyboardMarkup,
     KeyboardButton,
     Message,
-    ReplyKeyboardMarkup,
+    ReplyKeyboardMarkup, FSInputFile,
 )
 from dotenv import load_dotenv
 
@@ -887,17 +887,29 @@ async def cancel_handler(
 
 
 @dp.message(F.text == "👤 О психологе")
+@dp.message(F.text == "👤 О психологе")
 async def about_handler(message: Message) -> None:
-    await message.answer(
-        ABOUT_TEXT,
-        reply_markup=main_menu,
+    photo_path = (
+        Path(__file__).resolve().parent
+        / "psychologist.png"
     )
 
+    if photo_path.exists():
+        await message.answer_photo(
+            photo=FSInputFile(photo_path),
+            caption=(
+                "<b>Анна Орлова</b>\n"
+                "Психолог-консультант"
+            ),
+        )
+    else:
+        logger.warning(
+            "Фотография специалиста не найдена: %s",
+            photo_path,
+        )
 
-@dp.message(F.text == "💬 Как проходит консультация")
-async def consultation_handler(message: Message) -> None:
     await message.answer(
-        CONSULTATION_TEXT,
+        ABOUT_TEXT,
         reply_markup=main_menu,
     )
 
