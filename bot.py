@@ -47,7 +47,16 @@ dp = Dispatcher()
 APP_VERSION = "schedule-admin-v2"
 
 # Локальная база данных создастся рядом с bot.py автоматически.
-DB_PATH = Path(__file__).resolve().parent / "bookings.db"
+VOLUME_DIR = os.getenv(
+    "RAILWAY_VOLUME_MOUNT_PATH",
+    "",
+).strip()
+
+DB_PATH = (
+    Path(VOLUME_DIR) / "bookings.db"
+    if VOLUME_DIR
+    else Path(__file__).resolve().parent / "bookings.db"
+)
 
 # Начальное расписание создаётся только при первом запуске новой базы.
 # После этого специалист меняет его прямо в Telegram командой /setday.
