@@ -1,0 +1,6 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+bookings.db
+bot (1).py
